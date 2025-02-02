@@ -13,7 +13,7 @@ fi
 
 cd tutorial
 
-sudo chown -R $USER:$USER /var/www/tutorial
+
 
 if [ ! -e /var/www/tutorial/index.html ]; then
     # Create the file and write the HTML content
