@@ -13,29 +13,32 @@ fi
 
 cd tutorial
 
-if [ ! -e /var/www/tutorial/index.html ]; then
-    sudo touch  index.html <<EOf
-    <!doctype html>
-    <html>
-    <head>
-        <meta charset="utf-8">
-        <title>Hello, Nginx!</title>
-    </head>
-    <body>
-        <h1>Hello, Nginx!</h1>
-        <p>We have just configured our Nginx web server on Ubuntu Server!</p>
-    </body>
-    </html>
-EOf
-fi
+sudo chown -R $USER:$USER /var/www/tutorial
 
+if [ ! -e /var/www/tutorial/index.html ]; then
+    # Create the file and write the HTML content
+    sudo bash -c 'cat <<EOF > /var/www/tutorial/index.html
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Hello, Nginx!</title>
+</head>
+<body>
+    <h1>Hello, Nginx!</h1>
+    <p>We have just configured our Nginx web server on Ubuntu Server!</p>
+</body>
+</html>
+EOF'
+fi
 
 
 cd /etc/nginx/sites-enabled
 
 
+
 if [ ! -e /etc/nginx/sites-enabled/tutorial ]; then
-    touch  tutorial <<EOf
+    sudo bash -c 'cat <<EOF > /etc/nginx/sites-enabled/tutorial
 server {
        listen 81;
        listen [::]:81;
@@ -49,7 +52,7 @@ server {
                try_files $uri $uri/ =404;
        }
 }
-EOf
+EOF'
 fi
 
 sudo service nginx restart
