@@ -8,13 +8,13 @@ sudo apt install -y nginx
 cd /var/www
 
 if [ ! -e /var/www/tutorial ]; then
-    mkdir tutorial
+    sudo mkdir tutorial
 fi
 
 cd tutorial
 
 if [ ! -e /var/www/tutorial/index.html ]; then
-    touch  index.html <<EOf
+    sudo touch  index.html <<EOf
     <!doctype html>
     <html>
     <head>
@@ -34,7 +34,7 @@ fi
 cd /etc/nginx/sites-enabled
 
 
-if [ ! -e /var/www/tutorial ]; then
+if [ ! -e /etc/nginx/sites-enabled/tutorial ]; then
     touch  tutorial <<EOf
 server {
        listen 81;
