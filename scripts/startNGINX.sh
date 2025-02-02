@@ -37,8 +37,8 @@ cd /etc/nginx/sites-enabled
 if [ ! -e /var/www/tutorial ]; then
     touch  tutorial <<EOf
 server {
-       listen 8080;
-       listen [::]:8080;
+       listen 81;
+       listen [::]:81;
 
        server_name example.ubuntu.com;
 
@@ -52,4 +52,4 @@ server {
 EOf
 fi
 
-sudo systemctl restart nginx
+sudo service nginx restart

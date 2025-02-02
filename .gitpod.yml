@@ -1,4 +1,4 @@
 tasks : 
    - name : NGINX
      before :
-      source ./workspace/learnNGINX/scripts/startNGINX.sh
+      source /workspace/learnNGINX/scripts/startNGINX.sh
