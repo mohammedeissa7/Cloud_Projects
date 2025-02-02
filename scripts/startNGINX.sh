@@ -46,17 +46,5 @@ if [ -e /etc/nginx/sites-enabled/default ]; then
     sudo rm /etc/nginx/sites-enabled/default
 fi
 
-# Test the NGINX configuration
-sudo nginx -t
-
-# Restart NGINX based on the init system
-if command -v systemctl >/dev/null 2>&1; then
-    sudo systemctl restart nginx
-elif command -v service >/dev/null 2>&1; then
-    sudo service nginx restart
-elif command -v rc-service >/dev/null 2>&1; then
-    sudo rc-service nginx restart
-else
-    echo "Unable to restart NGINX: init system not recognized."
-    exit 1
-fi
+# Test and restart NGINX
+sudo nginx -t && sudo systemctl restart nginx
