@@ -1,23 +1,16 @@
 #!/bin/bash
 
+# Update and install NGINX
 sudo apt update
-
-
 sudo apt install -y nginx
 
-cd /var/www
+# Create the web directory
+sudo mkdir -p /var/www/tutorial
+sudo chown -R www-data:www-data /var/www/tutorial
+sudo chmod -R 755 /var/www/tutorial
 
-if [ ! -e /var/www/tutorial ]; then
-    sudo mkdir tutorial
-fi
-
-cd tutorial
-
-
-
-if [ ! -e /var/www/tutorial/index.html ]; then
-    # Create the file and write the HTML content
-    sudo bash -c 'cat <<EOF > /var/www/tutorial/index.html
+# Create the index.html file
+sudo bash -c 'cat <<EOF > /var/www/tutorial/index.html
 <!doctype html>
 <html>
 <head>
@@ -30,29 +23,40 @@ if [ ! -e /var/www/tutorial/index.html ]; then
 </body>
 </html>
 EOF'
-fi
 
-
-cd /etc/nginx/sites-enabled
-
-
-
-if [ ! -e /etc/nginx/sites-enabled/tutorial ]; then
-    sudo bash -c 'cat <<EOF > /etc/nginx/sites-enabled/tutorial
+# Create the NGINX configuration file
+sudo bash -c 'cat <<EOF > /etc/nginx/sites-enabled/tutorial
 server {
        listen 81;
        listen [::]:81;
 
-       server_name example.ubuntu.com;
+       server_name _;
 
        root /var/www/tutorial;
        index index.html;
 
        location / {
-               try_files $uri $uri/ =404;
+               try_files \$uri \$uri/ =404;
        }
 }
 EOF'
+
+# Remove the default configuration if it exists
+if [ -e /etc/nginx/sites-enabled/default ]; then
+    sudo rm /etc/nginx/sites-enabled/default
 fi
 
-sudo service nginx restart
+# Test the NGINX configuration
+sudo nginx -t
+
+# Restart NGINX based on the init system
+if command -v systemctl >/dev/null 2>&1; then
+    sudo systemctl restart nginx
+elif command -v service >/dev/null 2>&1; then
+    sudo service nginx restart
+elif command -v rc-service >/dev/null 2>&1; then
+    sudo rc-service nginx restart
+else
+    echo "Unable to restart NGINX: init system not recognized."
+    exit 1
+fi
