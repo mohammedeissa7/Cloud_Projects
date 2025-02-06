@@ -112,7 +112,7 @@ Click on [Parameter Store](https://us-east-1.console.aws.amazon.com/systems-mana
 ## Create Parameter - DBPassword
 *Click Create Parameter*
 
-**Name** : A4L/Wordpress/DBPassword
+**Name** : /A4L/Wordpress/DBPassword
 
 **Description** : Wordpress DB Password
 
@@ -181,6 +181,7 @@ DBEndpoint=$(aws ssm get-parameters --region us-east-1 --names /A4L/Wordpress/DB
 DBEndpoint=`echo $DBEndpoint | sed -e 's/^"//' -e 's/"$//'`
 
 ```
+![The_env_vars](./assets/ENV_VARS.jpg)
 
 **Install updates** : ```sudo dnf -y update```
 
@@ -252,17 +253,13 @@ copy the IPv4 Public IP into your clipboard (DON'T CLICK THE OPEN LINK ... just 
 
 ## Perform Initial Configuration and make a post
 
-**Site Title** : enter Catagram
+**Site Title** :  Catagram
 
-**Username enter** : admin in Password enter *4n1m4l54L1f3*
+**Username enter** : admin 
+
+**Password** : *4n1m4l54L1f3*
 
 **Email** : entr your email address
-
-**Install WordPress** : Click Log In
-
-**Username or Email Address** enter admin
-
-**Password** enter the *4n1m4l54L1f3*
 
 ***Click Log In***
 
@@ -286,6 +283,8 @@ to download some
 9 . Click Publish Click view Post
 
 # The Project is manually created 
+
+![The_site](./assets/the_site.jpg)
 
 ## The Outcomes is :
 
