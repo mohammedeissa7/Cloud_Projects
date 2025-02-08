@@ -1,4 +1,6 @@
 # Create RDS Subnet Group
+![EC2_RDS](./assets/ec2_Rds.jpg)
+
 **RDS** to select from a range of subnets to put its databases inside
 In this case you will give it a selection of *3 subnets* sn-db-A / B and C
 
