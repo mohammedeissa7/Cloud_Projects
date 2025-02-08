@@ -93,9 +93,9 @@ Click **View launch templates**
 # Launch an instance using it
 
 1. Select the launch template in the list ... it should be called Wordpress
-2. Select the launch template in the list ... it should be called Wordpress
 3. Scroll down to Network settings and under Subnet select sn-pub-A
-4. Scroll to Resource Tags click Add tag Set Key to Name and Value to Wordpress-LT Scroll to the bottom and click Launch Instance
+4. Scroll to Resource Tags click Add tag Set Key to Name and Value to Wordpress-LT Scroll to the bottom 
+4. click Launch Instance
 5. Click the instance id 
 
 # Test

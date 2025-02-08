@@ -1,16 +1,17 @@
 # Create RDS Subnet Group
+
 ![EC2_RDS](./assets/ec2_Rds.jpg)
 
 **RDS** to select from a range of subnets to put its databases inside
 In this case you will give it a selection of *3 subnets* sn-db-A / B and C
 
-* Move to the [RDS Console]( https://console.aws.amazon.com/rds/home?region=us-east-1#)
+* Move to the [RDS Console](https://console.aws.amazon.com/rds/home?region=us-east-1#)
 * Click Subnet Groups
-* Click Create DB Subnet Group
-* Under Name enter WordPressRDSSubNetGroup
-* Under Description enter RDS Subnet Group for WordPress
-* Under VPC select A4LVPC
-* Under Add subnets In Availability Zones select us-east-1a & us-east-1b & us-east-1c
+* Click Create [DB Subnet Group](https://us-east-1.console.aws.amazon.com/rds/home?region=us-east-1#create-db-subnet-group:)
+* **Name** : WordPressRDSSubNetGroup
+* **Description** : RDS Subnet Group for WordPress
+* **VPC** : A4LVPC
+* **Add subnets** : *Availability Zones* select us-east-1a & us-east-1b & us-east-1c
 * Under Subnets check the box next to
    1. 10.16.16.0/20 (this is sn-db-A)
    2. 10.16.80.0/20 (this is sn-db-B)
@@ -23,7 +24,7 @@ In this case you will give it a selection of *3 subnets* sn-db-A / B and C
 * Click **Create Database**
 * Click **Standard Create**
 * Click **MySql**
-* Under Version select **MySQL 8.0.32**
+* Under Version select **MySQL 8.0.40**
 * select **Free Tier** under templates this ensures there will be no costs for the database but it will be single AZ only
 * under Master Password and Confirm Password enter **4n1m4l54L1f3**
 * Under **DB Instance size**, then DB instance class, then Burstable classes (includes t classes) make sure db.t3.micro or **db.t2.micro or db.t4g.micro** is selected
@@ -34,7 +35,8 @@ In this case you will give it a selection of *3 subnets* sn-db-A / B and C
 * Make sure **Public Access** is set to **No**
 * Under VPC security groups make sure choose existing is selected, remove default and add **A4LVPC-SGDatabase**
 * Under Availability Zone set **us-east-1a**
-* ***IMPORTANT .. DON'T MISS*** THIS STEP Scroll down past Database **Authentication** & **Monitoring**and expand Additional configuration
+* ***IMPORTANT .. DON'T MISS*** THIS STEP Scroll down past Database **Authentication** & **Monitoring**  
+* expand Additional configuration
 * in the Initial database name box enter a4lwordpressdb
 * Scroll to the bottom and click **create Database**
 
