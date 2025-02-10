@@ -44,4 +44,81 @@ Now that the file system has been created, you need to add another parameter sto
 * **Value** : set the file system ID fs-XXXXXXX which you just noted down
 * **Create Parameter** 
 
+# Connect the file system to the EC2 instance & copy data
 
+*Open the [EC2 console](https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Instances:sort=desc:tag:Name)
+* Select the **Wordpress-LT instance**, right click, Connect, Select Session Manager and click Connect
+* type ```sudo bash```
+* type ```cd``` 
+* type ```clear``` 
+* install the amazon EFS utilities 
+```
+sudo dnf -y install amazon-efs-utils
+```
+* next you need to migrate the existing media content from wp-content into EFS, and this is a multi step process.
+* copy the content to a temporary location
+```
+cd /var/www/html
+sudo mv wp-content/ /tmp
+sudo mkdir wp-content
+```
+* get the efs file system ID from parameter store
+```
+EFSFSID=$(aws ssm get-parameters --region us-east-1 --names /A4L/Wordpress/EFSFSID --query Parameters[0].Value)
+EFSFSID=`echo $EFSFSID | sed -e 's/^"//' -e 's/"$//'`
+```
+* get the efs file system ID from parameter store
+```
+echo -e "$EFSFSID:/ /var/www/html/wp-content efs _netdev,tls,iam 0 0" >> /etc/fstab
+```
+```
+mount -a -t efs defaults
+```
+* now we need to copy the origin content data back in and fix permissions
+```
+mv /tmp/wp-content/* /var/www/html/wp-content/
+```
+```
+chown -R ec2-user:apache /var/www/
+```
+# Test that the wordpress app can load the media
+
+reboot the system 
+```
+reboot
+```
+
+# Update the launch template with the config to automate the EFS part
+
+* Go to the [EC2 console](https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Home:)
+* Click **Launch Templates**
+* Check the box next to the **Wordpress launch template**
+* click Actions and click **Modify Template (Create New Version)**
+* **Template version description** : *uses EFS filesystem defined in /A4L/Wordpress/EFSFSID*
+* Scroll to the bottom and expand Advanced Details
+* Scroll to the bottom and find User Data expand the entry box as much as possible : 
+    After ```#!/bin/bash -xe```
+
+```
+EFSFSID=$(aws ssm get-parameters --region us-east-1 --names /A4L/Wordpress/EFSFSID --query Parameters[0].Value)
+EFSFSID=`echo $EFSFSID | sed -e 's/^"//' -e 's/"$//'`
+```
+Find the line which says 
+```dnf install wget php-mysqlnd httpd php-fpm php-mysqli mariadb105-server php-json php php-devel stress -y``` 
+after stress add a space and paste in ***```amazon-efs-utils```***
+
+locate **```systemctl start httpd```**
+paste in the following :
+```
+mkdir -p /var/www/html/wp-content
+chown -R ec2-user:apache /var/www/
+echo -e "$EFSFSID:/ /var/www/html/wp-content efs _netdev,tls,iam 0 0" >> /etc/fstab
+mount -a -t efs defaults
+```
+* Click **Create template version**
+* Click **View Launch Template**
+* Click Actions and **select Set Default Version**
+* Under **Template version select 3**
+* Click **Set as default version**
+
+# FINISH
